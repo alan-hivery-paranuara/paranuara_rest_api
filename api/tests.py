@@ -84,7 +84,7 @@ class CommonFriendsEndpointTest(TestCase):
         self.person_one.delete()
         self.person_two.delete()
 
-    def test_person_endpoint(self):
+    def test_common_friends_endpoint(self):
         url = reverse('common-friends-view', kwargs={
             'user_id': self.person_one.pk, 'comparison_user_id': self.person_two.pk})
         response = self.client.get(url)
@@ -99,3 +99,9 @@ class CommonFriendsEndpointTest(TestCase):
                                          u'username': u'test'}}
         self.assertEquals(response.status_code, 200)
         self.assertEquals(json.loads(response.content), expected_output)
+
+    def test_common_friends_endpoint_404(self):
+        url = reverse('common-friends-view', kwargs={
+            'user_id': self.person_one.pk, 'comparison_user_id': 9999999999})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)

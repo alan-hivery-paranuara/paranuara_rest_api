@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -18,8 +19,8 @@ class PersonView(generics.RetrieveAPIView):
 class CommonFriendsView(APIView):
 
     def get(self, request, user_id, comparison_user_id):
-        user_one = Person.objects.get(pk=user_id)
-        user_two = Person.objects.get(pk=comparison_user_id)
+        user_one = get_object_or_404(Person, pk=user_id)
+        user_two = get_object_or_404(Person, pk=comparison_user_id)
         common_friends = set(
             user_one.friends.filter(eye_color="brown", deceased=False).values_list('name', flat=True)
         ).intersection(
